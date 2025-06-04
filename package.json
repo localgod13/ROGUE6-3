@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "vite": "^5.1.4"
+  },
+  "dependencies": {
+    "peerjs": "^1.5.4"
   }
 }
