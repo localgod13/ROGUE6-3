@@ -7,6 +7,7 @@ class NetworkManager {
     this.onPlayerLeft = null;
     this.onConnectionStatusChanged = null;
     this.onPositionUpdate = null;
+    this.isHost = false;
   }
 
   generateRoomCode() {
@@ -14,6 +15,7 @@ class NetworkManager {
   }
 
   updateConnectionStatus(status) {
+    console.log('Connection status:', status);
     const statusElement = document.getElementById('connection-status');
     if (statusElement) {
       statusElement.textContent = status;
@@ -27,12 +29,19 @@ class NetworkManager {
   hostGame() {
     return new Promise((resolve, reject) => {
       try {
+        if (typeof Peer === 'undefined') {
+          throw new Error('PeerJS not loaded');
+        }
+
         const roomCode = this.generateRoomCode();
+        console.log('Creating host peer with room code:', roomCode);
+        
         this.peer = new Peer(roomCode, {
           host: '0.peerjs.com',
           port: 443,
           path: '/',
           secure: true,
+          debug: 3,
           config: {
             iceServers: [
               { urls: 'stun:stun.l.google.com:19302' },
@@ -43,6 +52,8 @@ class NetworkManager {
             ]
           }
         });
+
+        this.isHost = true;
 
         this.peer.on('open', (id) => {
           console.log('Host peer opened with ID:', id);
@@ -68,11 +79,18 @@ class NetworkManager {
   joinGame(roomCode, playerData) {
     return new Promise((resolve, reject) => {
       try {
+        if (typeof Peer === 'undefined') {
+          throw new Error('PeerJS not loaded');
+        }
+
+        console.log('Creating joining peer for room:', roomCode);
+        
         this.peer = new Peer({
           host: '0.peerjs.com',
           port: 443,
           path: '/',
           secure: true,
+          debug: 3,
           config: {
             iceServers: [
               { urls: 'stun:stun.l.google.com:19302' },
@@ -83,6 +101,8 @@ class NetworkManager {
             ]
           }
         });
+
+        this.isHost = false;
 
         this.peer.on('open', (id) => {
           console.log('Joining peer opened with ID:', id);
