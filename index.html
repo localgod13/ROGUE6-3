@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roguelike Multiplayer</title>
+    <style>
+      body { 
+        margin: 0; 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #1a1a1a;
+        color: #ffffff;
+      }
+      #game-container { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+      }
+      #ui-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 100;
+        background: rgba(0, 0, 0, 0.85);
+        padding: 30px;
+        border-radius: 12px;
+        color: white;
+        min-width: 300px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+      .hidden { display: none; }
+      .input-group {
+        margin: 15px 0;
+      }
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #ccc;
+      }
+      input, select {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background: #2a2a2a;
+        color: white;
+        box-sizing: border-box;
+      }
+      input:focus, select:focus {
+        outline: none;
+        border-color: #4CAF50;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: none;
+        background: #4CAF50;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+      }
+      button:hover { 
+        background: #45a049; 
+      }
+      .color-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 10px 0;
+      }
+      .color-option {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.2s;
+      }
+      .color-option:hover {
+        transform: scale(1.1);
+      }
+      .color-option.selected {
+        border-color: white;
+        transform: scale(1.1);
+      }
+      #game-ui {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 100;
+      }
+      #room-code {
+        font-size: 18px;
+        color: #4CAF50;
+        white-space: nowrap;
+      }
+      #player-count {
+        color: #ccc;
+        font-size: 16px;
+      }
+      #connection-status {
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        margin-top: 5px;
+      }
+      .status-connected {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+      }
+      .status-disconnected {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+      }
+      .title {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #4CAF50;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-container"></div>
+    <div id="game-ui" class="hidden">
+      <div id="room-code"></div>
+      <div id="player-count"></div>
+      <div id="connection-status" class="status-disconnected">Disconnected</div>
+    </div>
+    <div id="ui-container">
+      <div id="menu">
+        <div class="title">Roguelike Multiplayer</div>
+        <div class="input-group">
+          <label for="player-name">Your Name</label>
+          <input type="text" id="player-name" placeholder="Enter your name" maxlength="15">
+        </div>
+        <div class="input-group">
+          <label>Choose Your Color</label>
+          <div class="color-options">
+            <div class="color-option" style="background: #ff0000" data-color="#ff0000"></div>
+            <div class="color-option" style="background: #00ff00" data-color="#00ff00"></div>
+            <div class="color-option" style="background: #0000ff" data-color="#0000ff"></div>
+            <div class="color-option" style="background: #ffff00" data-color="#ffff00"></div>
+            <div class="color-option" style="background: #ff00ff" data-color="#ff00ff"></div>
+            <div class="color-option" style="background: #00ffff" data-color="#00ffff"></div>
+          </div>
+        </div>
+        <button id="host-btn">Host Game</button>
+        <div class="input-group">
+          <input type="text" id="join-code" placeholder="Enter room code">
+          <button id="join-btn">Join Game</button>
+        </div>
+      </div>
+    </div>
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="src/network.js"></script>
+    <script src="src/game.js"></script>
+    <script src="src/main.js"></script>
+  </body>
+</html> 
