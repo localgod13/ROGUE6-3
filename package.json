@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "node server.js",
-    "postinstall": "npm run build"
+    "start": "vite preview"
   },
   "author": "",
   "license": "ISC",
@@ -15,9 +14,6 @@
     "vite": "^5.1.4"
   },
   "dependencies": {
-    "compression": "^1.8.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
     "peerjs": "^1.5.4"
   },
   "engines": {
